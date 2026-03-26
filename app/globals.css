@@ -15,11 +15,13 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
   background: var(--stern-black);
   color: var(--stern-offwhite);
+  overflow-x: hidden;
 }
 
 ::selection {

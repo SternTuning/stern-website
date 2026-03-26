@@ -114,13 +114,13 @@ export function CarShowroom({
     <Canvas
       frameloop={isInView ? 'always' : 'never'}
       gl={{
-        antialias: !isMobile,
+        antialias: true,
         alpha: false,
         toneMapping: 4 /* ACESFilmicToneMapping */,
         toneMappingExposure: 1.1,
         powerPreference: 'high-performance',
       }}
-      dpr={isMobile ? [1, 1.25] : [1, 1.5]}
+      dpr={isMobile ? [1, 1.6] : [1, 1.5]}
     >
       <Suspense fallback={null}>
         <CarShowroomInner

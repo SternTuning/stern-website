@@ -17,10 +17,10 @@ export function Ground({ isMobile = false }: { isMobile?: boolean }) {
       <planeGeometry args={[50, 50]} />
       <MeshReflectorMaterial
         mirror={0.45}
-        blur={isMobile ? [140, 60] : [200, 80]}
-        resolution={isMobile ? 256 : 512}
+        blur={isMobile ? [180, 70] : [200, 80]}
+        resolution={isMobile ? 384 : 512}
         mixBlur={0.85}
-        mixStrength={isMobile ? 32 : 38}
+        mixStrength={isMobile ? 36 : 38}
         roughness={0.8}
         depthScale={1.2}
         minDepthThreshold={0.4}
