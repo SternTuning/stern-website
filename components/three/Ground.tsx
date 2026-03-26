@@ -4,7 +4,7 @@ import { MeshReflectorMaterial } from '@react-three/drei';
 import { useRef } from 'react';
 import type { Mesh } from 'three';
 
-export function Ground() {
+export function Ground({ isMobile = false }: { isMobile?: boolean }) {
   const meshRef = useRef<Mesh>(null);
 
   return (
@@ -17,10 +17,10 @@ export function Ground() {
       <planeGeometry args={[50, 50]} />
       <MeshReflectorMaterial
         mirror={0.45}
-        blur={[200, 80]}
-        resolution={512}
+        blur={isMobile ? [140, 60] : [200, 80]}
+        resolution={isMobile ? 256 : 512}
         mixBlur={0.85}
-        mixStrength={38}
+        mixStrength={isMobile ? 32 : 38}
         roughness={0.8}
         depthScale={1.2}
         minDepthThreshold={0.4}

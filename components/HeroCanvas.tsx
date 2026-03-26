@@ -3,7 +3,6 @@
 import dynamic from 'next/dynamic';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { CanvasErrorBoundary } from './CanvasErrorBoundary';
-import { HeroMobileFallback } from './HeroMobileFallback';
 
 // Defer 3D bundle until after first paint so overlay and LCP are fast
 const CarShowroom = dynamic(
@@ -46,10 +45,10 @@ export function HeroCanvas({ scrollProgress: scrollProgressProp, embedded }: Her
 
   // Load 3D after first paint
   useEffect(() => {
-    if (!mounted || isMobile) return;
+    if (!mounted) return;
     const t = setTimeout(() => setLoadCanvas(true), 150);
     return () => clearTimeout(t);
-  }, [mounted, isMobile]);
+  }, [mounted]);
 
   // Pause 3D work when hero is out of view to reduce scroll crashes / context load
   useEffect(() => {
@@ -98,6 +97,7 @@ export function HeroCanvas({ scrollProgress: scrollProgressProp, embedded }: Her
             mouseParallax={mouseParallax}
             isHovering={isHovering}
             isInView={canvasInView}
+            isMobile={isMobile}
           />
         </CanvasErrorBoundary>
       ) : (
@@ -112,27 +112,14 @@ export function HeroCanvas({ scrollProgress: scrollProgressProp, embedded }: Her
     );
   }
 
-  if (isMobile) {
-    const mobileBlock = (
-      <div className="sticky top-0 h-screen">
-        <HeroMobileFallback />
-      </div>
-    );
-    return embedded ? (
-      <div className="absolute inset-0">{mobileBlock}</div>
-    ) : (
-      <div ref={containerRef} className="relative w-full min-h-[600px]" style={{ height: '180vh' }}>{mobileBlock}</div>
-    );
-  }
-
   const interactiveWrap = (
     <div
       className={embedded ? 'absolute inset-0' : 'relative w-full min-h-[600px]'}
       style={embedded ? undefined : { height: '180vh' }}
       ref={embedded ? undefined : containerRef}
-      onMouseMove={onMouseMove}
-      onMouseEnter={() => setIsHovering(true)}
-      onMouseLeave={() => setIsHovering(false)}
+      onMouseMove={isMobile ? undefined : onMouseMove}
+      onMouseEnter={isMobile ? undefined : () => setIsHovering(true)}
+      onMouseLeave={isMobile ? undefined : () => setIsHovering(false)}
     >
       {stickyContent}
     </div>

@@ -21,11 +21,13 @@ function Scene({
   mouseParallax,
   isHovering,
   isInView,
+  isMobile,
 }: {
   scrollProgress: number;
   mouseParallax: { x: number; y: number };
   isHovering: boolean;
   isInView: boolean;
+  isMobile: boolean;
 }) {
   const groupRef = useRef<Group>(null);
   const { camera } = useThree();
@@ -62,7 +64,7 @@ function Scene({
       <PerspectiveCamera makeDefault position={[0, 5, 12]} fov={45} />
       <fog attach="fog" args={['#050505', 20, 55]} />
       <Lighting />
-      <Ground />
+      <Ground isMobile={isMobile} />
       <group ref={groupRef} position={[0, 0, 0]}>
         <CarModel modelUrl={DEFAULT_MODEL} />
       </group>
@@ -76,11 +78,13 @@ function CarShowroomInner({
   mouseParallax,
   isHovering,
   isInView,
+  isMobile,
 }: {
   scrollProgress: number;
   mouseParallax: { x: number; y: number };
   isHovering: boolean;
   isInView: boolean;
+  isMobile: boolean;
 }) {
   return (
     <Scene
@@ -88,6 +92,7 @@ function CarShowroomInner({
       mouseParallax={mouseParallax}
       isHovering={isHovering}
       isInView={isInView}
+      isMobile={isMobile}
     />
   );
 }
@@ -97,23 +102,25 @@ export function CarShowroom({
   mouseParallax = { x: 0, y: 0 },
   isHovering = false,
   isInView = true,
+  isMobile = false,
 }: {
   scrollProgress?: number;
   mouseParallax?: { x: number; y: number };
   isHovering?: boolean;
   isInView?: boolean;
+  isMobile?: boolean;
 }) {
   return (
     <Canvas
       frameloop={isInView ? 'always' : 'never'}
       gl={{
-        antialias: true,
+        antialias: !isMobile,
         alpha: false,
         toneMapping: 4 /* ACESFilmicToneMapping */,
         toneMappingExposure: 1.1,
         powerPreference: 'high-performance',
       }}
-      dpr={[1, 1.5]}
+      dpr={isMobile ? [1, 1.25] : [1, 1.5]}
     >
       <Suspense fallback={null}>
         <CarShowroomInner
@@ -121,6 +128,7 @@ export function CarShowroom({
           mouseParallax={mouseParallax}
           isHovering={isHovering}
           isInView={isInView}
+          isMobile={isMobile}
         />
       </Suspense>
     </Canvas>
