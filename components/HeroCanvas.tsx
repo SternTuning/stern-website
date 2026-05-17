@@ -54,11 +54,10 @@ export function HeroCanvas({ scrollProgress: scrollProgressProp, embedded }: Her
     return () => window.removeEventListener('resize', check);
   }, []);
 
-  // Load 3D after first paint
+  // Start the 3D bundle immediately after hydration; the model itself is preloaded.
   useEffect(() => {
     if (!mounted) return;
-    const t = setTimeout(() => setLoadCanvas(true), 150);
-    return () => clearTimeout(t);
+    setLoadCanvas(true);
   }, [mounted]);
 
   // Pause 3D work when hero is out of view to reduce scroll crashes / context load

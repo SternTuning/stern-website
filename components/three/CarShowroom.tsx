@@ -4,12 +4,13 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { PerspectiveCamera } from '@react-three/drei';
 import { Suspense, useRef } from 'react';
 import type { Group } from 'three';
-import { CarModel, PlaceholderCar } from './CarModel';
+import { CarModel, PlaceholderCar, preloadCarModel } from './CarModel';
 import { Ground } from './Ground';
 import { Lighting } from './Lighting';
 
 const DESKTOP_MODEL = '/models/c43-optimized.glb';
 const MOBILE_MODEL = '/models/c43-mobile.glb';
+preloadCarModel(DESKTOP_MODEL);
 
 const PARALLAX_SMOOTH = 0.06;
 const PARALLAX_DEG = 3;
@@ -68,7 +69,7 @@ function Scene({
       <Lighting isMobile={isMobile || reduceQuality} />
       <Ground isMobile={isMobile || reduceQuality} />
       <group ref={groupRef} position={[0, 0, 0]}>
-        <CarModel modelUrl={isMobile || reduceQuality ? MOBILE_MODEL : DESKTOP_MODEL} />
+        <CarModel modelUrl={reduceQuality ? MOBILE_MODEL : DESKTOP_MODEL} />
       </group>
     </>
   );
@@ -116,19 +117,19 @@ export function CarShowroom({
   isMobile?: boolean;
   reduceQuality?: boolean;
 }) {
-  const lowPower = isMobile || reduceQuality;
+  const highQualityMobile = isMobile && !reduceQuality;
 
   return (
     <Canvas
       frameloop={isInView ? 'always' : 'never'}
       gl={{
-        antialias: !lowPower,
+        antialias: true,
         alpha: false,
         toneMapping: 4 /* ACESFilmicToneMapping */,
         toneMappingExposure: 1.1,
         powerPreference: 'high-performance',
       }}
-      dpr={lowPower ? [1, 1.25] : [1, 1.5]}
+      dpr={reduceQuality ? [1, 1.25] : highQualityMobile ? [1.25, 1.9] : [1, 1.5]}
       performance={{ min: 0.5 }}
     >
       <Suspense fallback={<PlaceholderCar />}>

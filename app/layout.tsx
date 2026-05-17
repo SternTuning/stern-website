@@ -25,6 +25,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={inter.variable}>
+      <head>
+        <link rel="preload" href="/models/c43-optimized.glb" as="fetch" crossOrigin="anonymous" />
+      </head>
       <body className="min-h-screen bg-stern-black font-sans text-stern-offwhite antialiased">
         {children}
       </body>
