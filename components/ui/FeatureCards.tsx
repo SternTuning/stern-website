@@ -100,7 +100,7 @@ const item = {
 
 export function FeatureCards() {
   return (
-    <section className="py-24 md:py-32 px-6 md:px-10 bg-stern-black border-t border-white/10">
+    <section className="px-6 pb-20 pt-12 bg-stern-black border-t border-white/10 md:px-10 md:pb-28 md:pt-14">
       <motion.div
         className="max-w-6xl mx-auto"
         initial="hidden"
@@ -108,7 +108,7 @@ export function FeatureCards() {
         viewport={{ once: true, margin: '-80px' }}
         variants={container}
       >
-        <h2 className="text-sm tracking-[0.3em] uppercase text-stern-silver/80 mb-16">
+        <h2 className="mb-10 text-sm tracking-[0.3em] uppercase text-stern-silver/80 md:mb-12">
           What STERN does
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">

@@ -15,19 +15,23 @@ export function Ground({ isMobile = false }: { isMobile?: boolean }) {
       receiveShadow
     >
       <planeGeometry args={[50, 50]} />
-      <MeshReflectorMaterial
-        mirror={0.45}
-        blur={isMobile ? [180, 70] : [200, 80]}
-        resolution={isMobile ? 384 : 512}
-        mixBlur={0.85}
-        mixStrength={isMobile ? 36 : 38}
-        roughness={0.8}
-        depthScale={1.2}
-        minDepthThreshold={0.4}
-        maxDepthThreshold={1.4}
-        color="#080808"
-        metalness={0.6}
-      />
+      {isMobile ? (
+        <meshStandardMaterial color="#070707" roughness={0.72} metalness={0.18} />
+      ) : (
+        <MeshReflectorMaterial
+          mirror={0.4}
+          blur={[180, 70]}
+          resolution={384}
+          mixBlur={0.85}
+          mixStrength={34}
+          roughness={0.82}
+          depthScale={1.1}
+          minDepthThreshold={0.4}
+          maxDepthThreshold={1.4}
+          color="#080808"
+          metalness={0.55}
+        />
+      )}
     </mesh>
   );
 }

@@ -35,7 +35,7 @@ function LoadedCar({ url }: { url: string }) {
   );
 }
 
-function PlaceholderCar() {
+export function PlaceholderCar() {
   return (
     <mesh castShadow>
       <icosahedronGeometry args={[2, 1]} />

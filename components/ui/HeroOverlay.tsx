@@ -17,11 +17,11 @@ export function HeroOverlay({ scrollProgress = 0 }: { scrollProgress?: number })
   return (
     <>
       <div className="absolute inset-0 pointer-events-none z-10 flex flex-col">
-        <header className="flex items-center justify-between px-6 md:px-10 py-6 pointer-events-auto">
+        <header className="flex items-center justify-between gap-3 px-4 py-4 pointer-events-auto sm:px-6 md:px-10 md:py-6">
           <Link href="/" className="text-stern-offwhite hover:opacity-80 transition-opacity duration-200">
-            <SternLogo className="w-10 h-10 md:w-12 md:h-12" />
+            <SternLogo className="h-9 w-9 md:h-12 md:w-12" />
           </Link>
-          <div className="pointer-events-auto">
+          <div className="pointer-events-auto min-w-0">
             <Nav />
           </div>
         </header>
@@ -29,10 +29,10 @@ export function HeroOverlay({ scrollProgress = 0 }: { scrollProgress?: number })
 
       {/* Fixed to viewport bottom so it's at the bottom of the first screen, not the hero section. */}
       <div
-        className="fixed bottom-0 left-0 right-0 z-10 px-6 md:px-10 pb-8 md:pb-10 pointer-events-none"
+        className="fixed bottom-0 left-0 right-0 z-10 px-4 pb-7 pointer-events-none sm:px-6 md:px-10 md:pb-10"
         style={{ transition: 'opacity 300ms ease-out' }}
       >
-        <div className="flex flex-row items-end justify-between w-full">
+        <div className="flex w-full flex-row items-end justify-between gap-4">
           <div
             className="transition-transform duration-300 ease-out"
             style={{ opacity, transform: `translateX(${leftX}px)` }}
@@ -48,7 +48,7 @@ export function HeroOverlay({ scrollProgress = 0 }: { scrollProgress?: number })
             </p>
           </div>
           <div
-            className="flex items-center gap-2 text-sm text-stern-offwhite/70 font-light transition-transform duration-300 ease-out"
+            className="hidden items-center gap-2 text-sm text-stern-offwhite/70 font-light transition-transform duration-300 ease-out sm:flex"
             style={{ opacity, transform: `translateX(${rightX}px)` }}
             aria-hidden
           >

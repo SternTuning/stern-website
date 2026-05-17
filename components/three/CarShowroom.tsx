@@ -1,15 +1,15 @@
 'use client';
 
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { PerspectiveCamera, Preload } from '@react-three/drei';
+import { PerspectiveCamera } from '@react-three/drei';
 import { Suspense, useRef } from 'react';
 import type { Group } from 'three';
-import { CarModel, preloadCarModel } from './CarModel';
+import { CarModel, PlaceholderCar } from './CarModel';
 import { Ground } from './Ground';
 import { Lighting } from './Lighting';
 
-const DEFAULT_MODEL = '/models/c43.glb';
-preloadCarModel(DEFAULT_MODEL);
+const DESKTOP_MODEL = '/models/c43-optimized.glb';
+const MOBILE_MODEL = '/models/c43-mobile.glb';
 
 const PARALLAX_SMOOTH = 0.06;
 const PARALLAX_DEG = 3;
@@ -22,12 +22,14 @@ function Scene({
   isHovering,
   isInView,
   isMobile,
+  reduceQuality,
 }: {
   scrollProgress: number;
   mouseParallax: { x: number; y: number };
   isHovering: boolean;
   isInView: boolean;
   isMobile: boolean;
+  reduceQuality: boolean;
 }) {
   const groupRef = useRef<Group>(null);
   const { camera } = useThree();
@@ -49,8 +51,8 @@ function Scene({
     smoothParallax.current.y += (mouseParallax.y - smoothParallax.current.y) * PARALLAX_SMOOTH;
     const azimuth = smoothParallax.current.x * (PARALLAX_DEG * (Math.PI / 180));
     const polarOffset = smoothParallax.current.y * 0.015;
-    const distance = 11 + scrollProgress * 5;
-    const height = 5 + scrollProgress * 3 + polarOffset;
+    const distance = (isMobile ? 15 : 11) + scrollProgress * (isMobile ? 3 : 5);
+    const height = (isMobile ? 4.2 : 5) + scrollProgress * (isMobile ? 2 : 3) + polarOffset;
     const x = Math.sin(azimuth) * distance;
     const z = Math.cos(azimuth) * distance;
     camPos.current = { x, y: height, z };
@@ -61,14 +63,13 @@ function Scene({
 
   return (
     <>
-      <PerspectiveCamera makeDefault position={[0, 5, 12]} fov={45} />
+      <PerspectiveCamera makeDefault position={[0, isMobile ? 4.2 : 5, isMobile ? 15 : 12]} fov={isMobile ? 52 : 45} />
       <fog attach="fog" args={['#050505', 20, 55]} />
-      <Lighting />
-      <Ground isMobile={isMobile} />
+      <Lighting isMobile={isMobile || reduceQuality} />
+      <Ground isMobile={isMobile || reduceQuality} />
       <group ref={groupRef} position={[0, 0, 0]}>
-        <CarModel modelUrl={DEFAULT_MODEL} />
+        <CarModel modelUrl={isMobile || reduceQuality ? MOBILE_MODEL : DESKTOP_MODEL} />
       </group>
-      <Preload all />
     </>
   );
 }
@@ -79,12 +80,14 @@ function CarShowroomInner({
   isHovering,
   isInView,
   isMobile,
+  reduceQuality,
 }: {
   scrollProgress: number;
   mouseParallax: { x: number; y: number };
   isHovering: boolean;
   isInView: boolean;
   isMobile: boolean;
+  reduceQuality: boolean;
 }) {
   return (
     <Scene
@@ -93,6 +96,7 @@ function CarShowroomInner({
       isHovering={isHovering}
       isInView={isInView}
       isMobile={isMobile}
+      reduceQuality={reduceQuality}
     />
   );
 }
@@ -103,32 +107,38 @@ export function CarShowroom({
   isHovering = false,
   isInView = true,
   isMobile = false,
+  reduceQuality = false,
 }: {
   scrollProgress?: number;
   mouseParallax?: { x: number; y: number };
   isHovering?: boolean;
   isInView?: boolean;
   isMobile?: boolean;
+  reduceQuality?: boolean;
 }) {
+  const lowPower = isMobile || reduceQuality;
+
   return (
     <Canvas
       frameloop={isInView ? 'always' : 'never'}
       gl={{
-        antialias: true,
+        antialias: !lowPower,
         alpha: false,
         toneMapping: 4 /* ACESFilmicToneMapping */,
         toneMappingExposure: 1.1,
         powerPreference: 'high-performance',
       }}
-      dpr={isMobile ? [1, 1.6] : [1, 1.5]}
+      dpr={lowPower ? [1, 1.25] : [1, 1.5]}
+      performance={{ min: 0.5 }}
     >
-      <Suspense fallback={null}>
+      <Suspense fallback={<PlaceholderCar />}>
         <CarShowroomInner
           scrollProgress={scrollProgress}
           mouseParallax={mouseParallax}
           isHovering={isHovering}
           isInView={isInView}
           isMobile={isMobile}
+          reduceQuality={reduceQuality}
         />
       </Suspense>
     </Canvas>

@@ -11,12 +11,12 @@ const links = [
 
 export function Nav() {
   return (
-    <nav className="flex items-center gap-1 sm:gap-3 md:gap-8 max-w-[calc(100vw-4.5rem)] sm:max-w-none overflow-hidden">
+    <nav className="flex max-w-[calc(100vw-4.75rem)] items-center gap-0.5 overflow-x-auto sm:max-w-none sm:gap-2 md:gap-5">
       {links.map(({ href, label }) => (
         <Link
           key={href}
           href={href}
-          className="text-[11px] sm:text-sm tracking-[0.08em] sm:tracking-widest whitespace-nowrap text-stern-offwhite/90 hover:text-stern-offwhite rounded-md sm:rounded-lg py-2 px-2 sm:py-2.5 sm:px-4 -mx-0.5 sm:-mx-1 border border-transparent hover:border-white/10 hover:bg-white/[0.06] transition-all duration-200"
+          className="whitespace-nowrap rounded-md border border-transparent px-1.5 py-2 text-[10px] tracking-[0.08em] text-stern-offwhite/90 transition-all duration-200 hover:border-white/10 hover:bg-white/[0.06] hover:text-stern-offwhite sm:px-3 sm:py-2.5 sm:text-sm sm:tracking-widest md:px-4"
         >
           {label}
         </Link>

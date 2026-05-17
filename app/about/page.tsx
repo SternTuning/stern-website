@@ -16,10 +16,10 @@ export default function AboutPage() {
           The story
         </h2>
         <p className="text-stern-offwhite leading-relaxed mb-6">
-          STERN — German for &quot;star&quot; — is built for those who understand that
-          precision tuning is engineering, not guesswork. We provide direct access
-          to Mercedes-AMG powertrain control: ECU, CPC, and datalogging in one
-          platform.
+          STERN means &quot;star&quot; in German. It is built for those who understand
+          that precision tuning is engineering, not guesswork. We provide direct
+          access to Mercedes-AMG powertrain control: ECU, CPC, and datalogging
+          in one platform.
         </p>
         <p className="text-stern-silver/80 leading-relaxed">
           No bloat. No middlemen. Just the tools and the map.

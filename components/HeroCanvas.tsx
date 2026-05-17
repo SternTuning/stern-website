@@ -32,12 +32,23 @@ export function HeroCanvas({ scrollProgress: scrollProgressProp, embedded }: Her
   const [mounted, setMounted] = useState(false);
   const [loadCanvas, setLoadCanvas] = useState(false);
   const [canvasInView, setCanvasInView] = useState(true);
+  const [shouldReduce3D, setShouldReduce3D] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setMounted(true);
-    const check = () => setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
+    const check = () => {
+      setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
+      const connection = (navigator as Navigator & {
+        connection?: { saveData?: boolean; effectiveType?: string };
+      }).connection;
+      setShouldReduce3D(
+        Boolean(connection?.saveData) ||
+          connection?.effectiveType === 'slow-2g' ||
+          connection?.effectiveType === '2g'
+      );
+    };
     check();
     window.addEventListener('resize', check);
     return () => window.removeEventListener('resize', check);
@@ -89,7 +100,7 @@ export function HeroCanvas({ scrollProgress: scrollProgressProp, embedded }: Her
   }, []);
 
   const stickyContent = (
-    <div ref={stickyRef} className="absolute inset-0 h-screen w-full sticky top-0">
+    <div ref={stickyRef} className="sticky top-0 h-[100svh] w-full">
       {loadCanvas ? (
         <CanvasErrorBoundary>
           <CarShowroom
@@ -98,6 +109,7 @@ export function HeroCanvas({ scrollProgress: scrollProgressProp, embedded }: Her
             isHovering={isHovering}
             isInView={canvasInView}
             isMobile={isMobile}
+            reduceQuality={shouldReduce3D}
           />
         </CanvasErrorBoundary>
       ) : (
@@ -108,14 +120,13 @@ export function HeroCanvas({ scrollProgress: scrollProgressProp, embedded }: Her
 
   if (!mounted) {
     return embedded ? <div className="absolute inset-0 bg-stern-black" /> : (
-      <div ref={containerRef} className="relative w-full min-h-[600px] bg-stern-black" style={{ height: '180vh' }} />
+      <div ref={containerRef} className="relative h-[108svh] min-h-[600px] w-full bg-stern-black md:h-[125vh] md:min-h-[680px] lg:h-[120vh]" />
     );
   }
 
   const interactiveWrap = (
     <div
-      className={embedded ? 'absolute inset-0' : 'relative w-full min-h-[600px]'}
-      style={embedded ? undefined : { height: '180vh' }}
+      className={embedded ? 'absolute inset-0' : 'relative h-[108svh] min-h-[600px] w-full md:h-[125vh] md:min-h-[680px] lg:h-[120vh]'}
       ref={embedded ? undefined : containerRef}
       onMouseMove={isMobile ? undefined : onMouseMove}
       onMouseEnter={isMobile ? undefined : () => setIsHovering(true)}

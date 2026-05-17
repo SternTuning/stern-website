@@ -27,8 +27,7 @@ export function HeroSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative w-full min-h-[600px]"
-      style={{ height: '180vh' }}
+      className="relative h-[108svh] min-h-[600px] w-full md:h-[125vh] md:min-h-[680px] lg:h-[120vh]"
     >
       <HeroCanvas scrollProgress={scrollProgress} embedded />
       <HeroOverlay scrollProgress={scrollProgress} />
