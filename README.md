@@ -79,3 +79,9 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
+
+## Deployment
+
+Every push to `main` is built and deployed automatically to the self-hosted server; server-only environment variables are configured there.
+
+CI (`.github/workflows/ci.yml`) runs `npm ci` and `npm run build` for pull requests and pushes to `main`.
